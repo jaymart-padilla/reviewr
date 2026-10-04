@@ -1,5 +1,5 @@
-import { FormData } from '@/components/sidebar/profile/types';
 import { createClient } from '@/lib/supabase/client';
+import type { FormData } from '@/components/sidebar/profile/types';
 
 const supabase = createClient();
 
