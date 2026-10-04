@@ -1,0 +1,69 @@
+.book {
+  isolation: isolate;
+  perspective: calc(var(--spacing) * 550);
+}
+
+/* Keep faces in a flat stack: a shared preserve-3d scene can leave repaint seams. */
+.face {
+  transform-origin: left;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transition: transform var(--turn-duration) var(--turn-easing);
+}
+
+.cover {
+  z-index: 4;
+}
+
+.about {
+  z-index: 3;
+}
+
+.notes {
+  z-index: 2;
+}
+
+.story {
+  z-index: 1;
+}
+
+.cover,
+.about {
+  transform: rotateY(var(--leaf-angle, 0deg));
+}
+
+/* This keeps the reverse face on the same hinge, then places it to the left when open. */
+.story,
+.notes {
+  transform: rotateY(calc(var(--leaf-angle, 0deg) + 180deg)) translateX(-100%);
+}
+
+.book[data-book-chapter='about'] :is(.cover, .story),
+.book[data-book-chapter='how-it-works'] :is(.cover, .story, .about, .notes) {
+  --leaf-angle: -180deg;
+}
+
+.book [data-book-scroll] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-book-leaf) var(--color-book-page);
+}
+
+@media (max-width: 900px) {
+  .face {
+    transition:
+      transform var(--turn-duration) var(--turn-easing),
+      opacity 250ms 280ms;
+  }
+
+  .story,
+  .notes {
+    display: none;
+  }
+
+  .book[data-book-chapter='about'] .cover,
+  .book[data-book-chapter='how-it-works'] :is(.cover, .about) {
+    --leaf-angle: -105deg;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
