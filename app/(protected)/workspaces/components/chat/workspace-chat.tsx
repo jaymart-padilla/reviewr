@@ -94,7 +94,7 @@ export function WorkspaceChat({ workspace }: { workspace: Tables<'workspaces'> }
       chatInputRef.current?.focus({
         focusVisible: false,
         preventScroll: true, // prevents interfering with scrollIntoView
-      });
+      } as FocusOptions);
     }
   }, [selectedMode, isModeLoading, sessions]);
 
