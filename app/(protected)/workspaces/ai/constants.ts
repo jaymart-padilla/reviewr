@@ -4,9 +4,9 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const AI_MODELS = {
   embedding: 'gemini-embedding-001',
   contentGeneration: 'gemini-3.5-flash',
-  queryReformulation: 'gemini-3.5-flash',
+  // queryReformulation: 'gemini-3.5-flash',
   // contentGeneration: 'gemini-3.1-flash-lite',
-  // queryReformulation: 'gemini-3.1-flash-lite',
+  queryReformulation: 'gemini-3.1-flash-lite',
 };
 
 // Must exactly match the dimension of `document_chunks.embedding` pgvector column (e.g. `vector(768)`)
