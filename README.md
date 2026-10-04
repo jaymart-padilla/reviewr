@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div align="center">
   <img src="public/icon.svg" alt="Logo" height="40" />
   <h1>Reviewr</h1>
 </div>
