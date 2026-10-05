@@ -42,6 +42,8 @@ const bookmarkVariants = cva(
 
 const chapterNumber =
   'ml-auto text-book-tiny font-normal opacity-65 book-medium:hidden book-mobile:hidden';
+const bookmarkLabel =
+  'min-w-0 flex-1 book-mobile:truncate book-mobile:w-full book-mobile:flex-none text-center';
 
 export function ReviewrNavigation({
   activeChapter,
@@ -95,28 +97,28 @@ export function ReviewrNavigation({
           ) : (
             <Compass size={16} aria-hidden="true" />
           )}
-          <span>{chapter.label}</span>
+          <span className={bookmarkLabel}>{chapter.label}</span>
           <span className={chapterNumber}>{String(index + 1).padStart(2, '0')}</span>
         </Button>
       ))}
       {isAuthenticated ? (
         <Link className={bookmarkVariants({ chapter: 'continue' })} href={paths.workspaces.url}>
           <LogIn size={16} aria-hidden="true" />
-          <span>Continue reading</span>
+          <span className={bookmarkLabel}>Continue reading</span>
           <span className={chapterNumber}>{String(bookChapters.length + 1).padStart(2, '0')}</span>
         </Link>
       ) : (
         <>
           <Link className={bookmarkVariants({ chapter: 'login' })} href={paths.auth.login.url}>
             <LogIn size={16} aria-hidden="true" />
-            <span>{paths.auth.login.text}</span>
+            <span className={bookmarkLabel}>{paths.auth.login.text}</span>
             <span className={chapterNumber}>
               {String(bookChapters.length + 1).padStart(2, '0')}
             </span>
           </Link>
           <Link className={bookmarkVariants({ chapter: 'signup' })} href={paths.auth.signup.url}>
             <UserPlus size={16} aria-hidden="true" />
-            <span>{paths.auth.signup.text}</span>
+            <span className={bookmarkLabel}>{paths.auth.signup.text}</span>
             <span className={chapterNumber}>
               {String(bookChapters.length + 2).padStart(2, '0')}
             </span>
