@@ -2,7 +2,10 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ['pdfjs-dist'],
-  /* config options here */
+  outputFileTracingIncludes: {
+    // PDF.js loads its worker dynamically, including for server-side text extraction.
+    '/workspaces/*': ['./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs'],
+  },
 };
 
 export default nextConfig;
