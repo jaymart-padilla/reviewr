@@ -25,6 +25,7 @@ function formatSources(sources: SourceRef[] | null): string[] {
 async function streamAssistantReply({
   workspace,
   sessionId,
+  userMessageId,
   mode,
   message,
   onToken,
@@ -32,6 +33,7 @@ async function streamAssistantReply({
 }: {
   workspace: Tables<'workspaces'>;
   sessionId: string;
+  userMessageId: string;
   mode: ChatMode;
   message: string;
   onToken: (chunk: string) => void;
@@ -44,6 +46,7 @@ async function streamAssistantReply({
     body: JSON.stringify({
       workspaceId,
       sessionId,
+      userMessageId,
       mode,
       content: message,
       is_readme_enabled,

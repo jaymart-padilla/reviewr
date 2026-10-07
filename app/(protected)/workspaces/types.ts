@@ -30,6 +30,7 @@ export type ChatMode = Tables<'chat_sessions'>['mode'];
 export type ChatMessage = Tables<'chat_messages'> & {
   _status?: 'sending' | 'failed';
   _retryContent?: string; // for failed llm response
+  _retryUserMessageId?: string; // persisted user message that the failed response belongs to
   _error?: string;
 };
 export interface ModeState {

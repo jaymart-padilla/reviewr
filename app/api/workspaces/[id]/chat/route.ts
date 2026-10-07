@@ -16,6 +16,7 @@ import type { DocumentChunkMatch } from '@/app/(protected)/workspaces/types';
 
 const chatRequestSchema = z.object({
   workspaceId: z.uuid(),
+  userMessageId: z.uuid(),
   mode: z.enum(CHAT_MODE_VALUES),
   is_readme_enabled: z.boolean(),
   readme_content: z.string().trim().max(README_LIMIT).nullable(),
@@ -37,13 +38,15 @@ export async function POST(req: Request) {
     );
   }
 
-  const { workspaceId, sessionId, mode, content, is_readme_enabled, readme_content } = parsed.data;
+  const { workspaceId, sessionId, userMessageId, mode, content, is_readme_enabled, readme_content } =
+    parsed.data;
   const supabase = createServiceClient();
 
   const { data: history } = await supabase
     .from('chat_messages')
     .select('role, content')
     .eq('session_id', sessionId)
+    .neq('id', userMessageId)
     .order('created_at', { ascending: false })
     .limit(RECENT_TURN_HISTORY_LIMIT);
   const recentTurns = (history ?? []).reverse();

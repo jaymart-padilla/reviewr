@@ -194,7 +194,7 @@ export function WorkspaceChat({ workspace }: { workspace: Tables<'workspaces'> }
       messages: state.messages.map((m) => (m.id === tempId ? result.message : m)),
     }));
 
-    await generateAssistantReply(mode, sessionId, content);
+    await generateAssistantReply(mode, sessionId, content, result.message.id);
   }
 
   // stream llm for response
@@ -202,6 +202,7 @@ export function WorkspaceChat({ workspace }: { workspace: Tables<'workspaces'> }
     mode: ChatMode,
     sessionId: string,
     content: string,
+    userMessageId: string,
     retryAssistantId?: string
   ) {
     setStreamingText('');
@@ -209,6 +210,7 @@ export function WorkspaceChat({ workspace }: { workspace: Tables<'workspaces'> }
       const { fullText, sources } = await streamAssistantReply({
         workspace,
         sessionId,
+        userMessageId,
         mode,
         message: content,
         // callback that appends each streamed LLM response chunk to streamingText
@@ -253,6 +255,7 @@ export function WorkspaceChat({ workspace }: { workspace: Tables<'workspaces'> }
                   created_at: new Date().toISOString(),
                   _status: 'failed',
                   _retryContent: content,
+                  _retryUserMessageId: userMessageId,
                 },
               ],
             }
@@ -281,7 +284,7 @@ export function WorkspaceChat({ workspace }: { workspace: Tables<'workspaces'> }
   async function handleRetryAssistant(messageId: string, mode: ChatMode) {
     const message = sessions[mode].messages.find((m) => m.id === messageId);
     const sessionId = sessions[mode].sessionId;
-    if (!message || !sessionId || !message._retryContent) return;
+    if (!message || !sessionId || !message._retryContent || !message._retryUserMessageId) return;
 
     setIsSending(true);
     updateMode(mode, (state) => ({
@@ -289,7 +292,13 @@ export function WorkspaceChat({ workspace }: { workspace: Tables<'workspaces'> }
       messages: state.messages.map((m) => (m.id === messageId ? { ...m, _status: 'sending' } : m)),
     }));
 
-    await generateAssistantReply(mode, sessionId, message._retryContent, messageId);
+    await generateAssistantReply(
+      mode,
+      sessionId,
+      message._retryContent,
+      message._retryUserMessageId,
+      messageId
+    );
     setIsSending(false);
   }
 
